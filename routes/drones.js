@@ -37,6 +37,7 @@ router.post('/drones/create', async (req, res, next) => {
 	try {
 		const { name, propellers, maxSpeed } = req.body;
 
+		//avoid submitting & posting an empty form
 		if (name && propellers && maxSpeed) {
 		let newDrone = await Drone.create({ name, propellers, maxSpeed })
 		res.redirect('/drones');}
