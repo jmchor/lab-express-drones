@@ -19,16 +19,11 @@ router.get('/drones/create', async (req, res, next) => {
 	// Iteration #3: Add a new drone
 
 	try {
-
-		res.render('drones/create-form')
-
-
+		res.render('drones/create-form');
 	} catch (error) {
 		console.log(error);
 		next(error);
 	}
-
-
 });
 
 router.post('/drones/create', async (req, res, next) => {
@@ -39,31 +34,54 @@ router.post('/drones/create', async (req, res, next) => {
 
 		//avoid submitting & posting an empty form
 		if (name && propellers && maxSpeed) {
-		let newDrone = await Drone.create({ name, propellers, maxSpeed })
-		res.redirect('/drones');}
-		else {
-			res.redirect('/drones/create')
+			let newDrone = await Drone.create({ name, propellers, maxSpeed });
+			res.redirect('/drones');
+		} else {
+			res.redirect('/drones/create');
 		}
-
 	} catch (error) {
 		console.log(error);
 		next(error);
 	}
 });
 
-router.get('/drones/:id/edit', (req, res, next) => {
+router.get('/drones/:id/edit', async (req, res, next) => {
 	// Iteration #4: Update the drone
-	// ... your code here
+	const { id } = req.params;
+	try {
+		let droneToEdit = await Drone.findById(id);
+		res.render('drones/update-form', { droneToEdit: droneToEdit });
+	} catch (error) {
+		console.log(error);
+		next(error);
+	}
 });
 
-router.post('/drones/:id/edit', (req, res, next) => {
+router.post('/drones/:id/edit', async (req, res, next) => {
 	// Iteration #4: Update the drone
-	// ... your code here
+	const { id } = req.params;
+	const { name, propellers, maxSpeed } = req.body;
+
+	try {
+		let droneToUpdate = await Drone.findByIdAndUpdate(id, { name, propellers, maxSpeed }, { new: true });
+		res.redirect(`/drones`);
+	} catch (error) {
+		console.log(error);
+		next(error);
+	}
 });
 
-router.post('/drones/:id/delete', (req, res, next) => {
+router.post('/drones/:id/delete', async (req, res, next) => {
 	// Iteration #5: Delete the drone
-	// ... your code here
+	const { id } = req.params;
+
+	try {
+		await Drone.findByIdAndDelete(id);
+		res.redirect('/drones');
+	} catch (error) {
+		console.log(error);
+		next(error);
+	}
 });
 
 module.exports = router;

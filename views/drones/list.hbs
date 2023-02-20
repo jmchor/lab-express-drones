@@ -8,6 +8,14 @@
 		<h4>Maximum Speed: {{maxSpeed}}</h4>
 	</div>
 	<br />
+	<a href='/drones/{{_id}}/edit'>Update Drone</a>
+	<br />
+
+	<br />
+	<form action='/drones/{{_id}}/delete' method='POST'>
+		<button type='submit'>Delete Drone</button>
+	</form>
+	<br />
 	<hr />
 
 {{/each}}
