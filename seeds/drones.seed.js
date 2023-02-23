@@ -19,14 +19,17 @@ mongoose
 	.connect(MONGO_URI)
 	.then((x) => {
 		console.log(`Connected to Mongo! Database name: "${x.connections[0].name}"`);
-		return Drone.create(droneArray);
-	})
-	.then(() => {
-		console.log(`Successfully created ${droneArray.length} drone models in the database`);
-		return mongoose.connection.close();
-	})
-	.then(() => {
-		console.log('Closed connection to database.');
+		Drone.create(droneArray)
+			.then(() => {
+				console.log(`Successfully created ${droneArray.length} drone models in the database`);
+				mongoose.connection.close();
+			})
+			.then(() => {
+				console.log('Closed connection to database.');
+			})
+			.catch((err) => {
+				console.error('Error creating drones: ', err);
+			});
 	})
 	.catch((err) => {
 		console.error('Error connecting to mongo: ', err);

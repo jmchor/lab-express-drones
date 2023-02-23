@@ -32,8 +32,14 @@ router.post('/drones/create', async (req, res, next) => {
 	try {
 		const { name, propellers, maxSpeed } = req.body;
 
+		let checkDrone = await Drone.findOne({ name });
+
+		if (checkDrone) {
+			let message = 'Drone already exists!';
+			res.render('error', { message });
+		}
 		//avoid submitting & posting an empty form
-		if (name && propellers && maxSpeed) {
+		else if (!checkDrone && name && propellers && maxSpeed) {
 			let newDrone = await Drone.create({ name, propellers, maxSpeed });
 			res.redirect('/drones');
 		} else {
